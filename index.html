@@ -8,7 +8,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="manifest" href="manifest.json">
     <style>
-        /* --- Futuristic Glassmorphism Variables --- */
         :root {
             --primary-color: #00f2ff;
             --primary-glow: rgba(0, 242, 255, 0.4);
@@ -37,12 +36,11 @@
             background: linear-gradient(to bottom, #24243e, #302b63, #0f0c29);
             color: var(--text-primary);
             height: 100vh;
-            height: -webkit-fill-available;
+            height: 100dvh; /* Dynamic viewport height for mobile */
             overflow: hidden;
             font-size: 16px;
         }
 
-        /* Animated Background Mesh */
         body::before {
             content: '';
             position: absolute;
@@ -63,14 +61,13 @@
         #app {
             display: flex;
             height: 100vh;
-            height: -webkit-fill-available;
+            height: 100dvh;
             width: 100vw;
             position: relative;
             backdrop-filter: blur(var(--blur-amount));
             -webkit-backdrop-filter: blur(var(--blur-amount));
         }
 
-        /* --- Glassmorphism Mixin Helper --- */
         .glass-panel {
             background: var(--glass-bg);
             backdrop-filter: blur(var(--blur-amount));
@@ -79,7 +76,7 @@
             box-shadow: var(--shadow-soft);
         }
 
-        /* --- Sidebar --- */
+        /* SIDEBAR - Fixed height issue */
         .sidebar {
             width: 380px;
             display: flex;
@@ -88,6 +85,7 @@
             z-index: 10;
             height: 100%;
             border-right: 1px solid var(--glass-border);
+            flex-shrink: 0;
         }
 
         .sidebar-header {
@@ -97,6 +95,7 @@
             gap: 12px;
             border-bottom: 1px solid var(--glass-border);
             background: rgba(20, 20, 30, 0.8);
+            flex-shrink: 0;
         }
 
         .search-bar {
@@ -121,6 +120,7 @@
             flex: 1;
             overflow-y: auto;
             padding: 10px;
+            min-height: 0; /* Important for flex child scrolling */
         }
 
         .contact {
@@ -147,7 +147,7 @@
         .avatar {
             width: 48px;
             height: 48px;
-            border-radius: 16px; /* Squircle */
+            border-radius: 16px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             align-items: center;
@@ -168,6 +168,9 @@
             font-weight: 600;
             margin-bottom: 4px;
             font-size: 16px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .contact-preview {
@@ -178,13 +181,14 @@
             text-overflow: ellipsis;
         }
 
-        /* --- Chat Area --- */
+        /* CHAT CONTAINER - Fixed layout */
         .chat-container {
             flex: 1;
             display: flex;
             flex-direction: column;
             height: 100%;
             position: relative;
+            min-width: 0;
         }
 
         .chat-header {
@@ -196,6 +200,7 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--glass-border);
+            flex-shrink: 0;
         }
 
         .back-btn {
@@ -208,6 +213,7 @@
             cursor: pointer;
             padding: 0;
             transition: transform 0.2s;
+            flex-shrink: 0;
         }
         
         .back-btn:active { transform: scale(0.9); }
@@ -223,10 +229,23 @@
             font-weight: 700;
             margin-right: 14px;
             box-shadow: 0 4px 12px rgba(0,114,255,0.3);
+            flex-shrink: 0;
         }
 
-        .chat-info { flex: 1; }
-        .chat-name { font-weight: 700; font-size: 16px; letter-spacing: 0.5px; }
+        .chat-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .chat-name { 
+            font-weight: 700; 
+            font-size: 16px; 
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
         .chat-status { 
             color: var(--primary-color); 
             font-size: 12px; 
@@ -235,6 +254,7 @@
             align-items: center;
             gap: 6px;
         }
+        
         .chat-status::before {
             content: '';
             width: 6px; height: 6px;
@@ -243,6 +263,7 @@
             box-shadow: 0 0 8px var(--primary-color);
         }
 
+        /* MESSAGES CONTAINER - Properly fills space */
         .messages-container {
             flex: 1;
             overflow-y: auto;
@@ -251,9 +272,9 @@
             flex-direction: column;
             gap: 16px;
             scroll-behavior: smooth;
+            min-height: 0; /* Critical for flex layout */
         }
 
-        /* Custom Scrollbar */
         .messages-container::-webkit-scrollbar { width: 6px; }
         .messages-container::-webkit-scrollbar-track { background: transparent; }
         .messages-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
@@ -267,6 +288,7 @@
             position: relative;
             animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            word-wrap: break-word;
         }
 
         @keyframes popIn {
@@ -298,7 +320,7 @@
             font-weight: 600;
         }
 
-        /* --- Input Area --- */
+        /* INPUT CONTAINER - Stays at bottom */
         .message-input-container {
             padding: 16px 20px;
             background: rgba(20, 20, 30, 0.6);
@@ -309,6 +331,7 @@
             gap: 12px;
             align-items: flex-end;
             padding-bottom: calc(16px + env(safe-area-inset-bottom));
+            flex-shrink: 0;
         }
 
         .message-input {
@@ -324,6 +347,7 @@
             line-height: 1.4;
             outline: none;
             transition: all 0.3s;
+            overflow-y: auto;
         }
 
         .message-input:focus {
@@ -363,10 +387,10 @@
             width: 20px;
             height: 20px;
             fill: #000;
-            margin-left: 2px; /* Visual alignment */
+            margin-left: 2px;
         }
 
-        /* --- Login Screen --- */
+        /* LOGIN SCREEN */
         .login-screen {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -391,9 +415,8 @@
             align-items: center;
             justify-content: center;
             margin-bottom: 32px;
-            border: 1px solid rgba(255,255,255,0.5,255,0.2);
+                        transform: rotate(45deg);
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transform: rotate(45deg);
         }
         .logo-inner {
             transform: rotate(-45deg);
@@ -445,7 +468,7 @@
             border-color: var(--primary-color);
         }
 
-        /* --- Settings Modal --- */
+        /* SETTINGS MODAL */
         .settings-modal {
             display: none;
             position: fixed;
@@ -512,6 +535,7 @@
             text-align: center;
             padding: 40px;
             opacity: 0.6;
+            min-height: 200px;
         }
         .empty-state svg {
             width: 64px;
@@ -521,7 +545,7 @@
             opacity: 0.5;
         }
 
-        /* --- Mobile Responsive --- */
+        /* MOBILE RESPONSIVE */
         @media (max-width: 768px) {
             .sidebar {
                 position: absolute;
@@ -658,27 +682,27 @@
         let currentUser = null;
         let currentChat = null;
         let activeMessagesQuery = null;
-        let contacts = [];
+                let contacts = [];
 
         // --- DOM Elements ---
         const loginScreen = document.getElementById('loginScreen');
         const appContainer = document.getElementById('app');
-        googleLoginBtn = document.getElementById('googleLoginBtn');
-        sidebar = document.getElementById('sidebar');
-        backBtn = document.getElementById('backBtn');
-        contactsList = document.getElementById('contactsList');
-        messagesContainer = document.getElementById('messagesContainer');
-        messageInput = document.getElementById('messageInput');
-        sendBtn = document.getElementById('sendBtn');
-        chatName = document.getElementById('chatName');
-        chatStatus = document.getElementById('chatStatus');
-        chatAvatar = document.getElementById('chatAvatar');
-        emptyState = document.getElementById('emptyState');
-        settingsBtn = document.getElementById('settingsBtn');
-        settingsModal = document.getElementById('settingsModal');
-        closeSettings = document.getElementById('closeSettings');
-        searchBar = document.getElementById('searchBar');
-        colorOptions = document.querySelectorAll('.color-option');
+        const googleLoginBtn = document.getElementById('googleLoginBtn');
+        const sidebar = document.getElementById('sidebar');
+        const backBtn = document.getElementById('backBtn');
+        const contactsList = document.getElementById('contactsList');
+        const messagesContainer = document.getElementById('messagesContainer');
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const chatName = document.getElementById('chatName');
+        const chatStatus = document.getElementById('chatStatus');
+        const chatAvatar = document.getElementById('chatAvatar');
+        const emptyState = document.getElementById('emptyState');
+        const settingsBtn = document.getElementById('settingsBtn');
+        const settingsModal = document.getElementById('settingsModal');
+        const closeSettings = document.getElementById('closeSettings');
+        const searchBar = document.getElementById('searchBar');
+        const colorOptions = document.querySelectorAll('.color-option');
 
         // --- Core Logic ---
 
@@ -687,7 +711,7 @@
             auth.onAuthStateChanged(user => {
                 if (user) {
                     currentUser = user;
-                    // Update user presence
+                    // Update user presence in database
                     db.ref('users/' + user.uid).set({
                         uid: user.uid,
                         name: user.displayName || 'Anonymous User',
@@ -710,6 +734,13 @@
             backBtn.addEventListener('click', () => {
                 sidebar.classList.remove('hidden');
                 currentChat = null;
+                // Reset UI to empty state if we go back
+                messagesContainer.innerHTML = '';
+                messagesContainer.appendChild(emptyState);
+                emptyState.style.display = 'flex';
+                chatName.textContent = 'Select a chat';
+                chatStatus.textContent = '';
+                chatAvatar.textContent = '?';
             });
 
             sendBtn.addEventListener('click', sendMessage);
@@ -721,17 +752,11 @@
                 messageInput.style.height = Math.min(messageInput.scrollHeight, 120) + 'px';
             });
 
-            // Send on Enter (desktop), Shift+Enter for new line
+            // Send on Enter (desktop & mobile), Shift+Enter for new line
             messageInput.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
-                    if (window.innerWidth <= 768) {
-                        // Mobile: prevent default to avoid keyboard issues, handle manually
-                        e.preventDefault();
-                        sendMessage();
-                    } else {
-                        e.preventDefault();
-                        sendMessage();
-                    }
+                    e.preventDefault();
+                    sendMessage();
                 }
             });
 
@@ -773,7 +798,7 @@
         function showLogin() { 
             loginScreen.style.display = 'flex'; 
             appContainer.style.display = 'none'; 
-            sidebar.classList.remove('hidden'); // Reset sidebar state
+            sidebar.classList.remove('hidden'); 
         }
         function showApp() { 
             loginScreen.style.display = 'none'; 
@@ -786,13 +811,14 @@
         }
 
         function syncUsersDirectory() {
+            // Listen for changes in the users database
             db.ref('users').on('value', (snapshot) => {
                 const users = snapshot.val() || {};
                 contacts = Object.values(users)
                     .filter(u => u.uid !== currentUser.uid)
                     .map(u => ({
                         id: u.uid,
-                        name: u.name,
+                        name: u.name || 'Unknown User',
                         avatar: (u.name || '?').charAt(0).toUpperCase(),
                         lastMessage: 'Tap to chat',
                     }));
@@ -803,7 +829,7 @@
         function renderContacts(list) {
             contactsList.innerHTML = '';
             if (list.length === 0) {
-                contactsList.innerHTML = '<div class="empty-state" style="padding:20px"><p>No contacts found</p></div>';
+                contactsList.innerHTML = '<div class="empty-state" style="padding:20px; min-height:0;"><p>No contacts found</p></div>';
                 return;
             }
             list.forEach(c => {
@@ -852,7 +878,7 @@
                 
                 if (!data) {
                     messagesContainer.innerHTML = `
-                        <div class="empty-state" style="opacity:0.4">
+                        <div class="empty-state" style="opacity:0.4; min-height:0;">
                             <h3>Say Hello! 👋</h3>
                             <p>Start the conversation.</p>
                         </div>`;
