@@ -537,7 +537,7 @@
             </svg>
         </div>
         <h1 class="login-title">Langis</h1>
-        <p class="login-subtitle">Private messaging for everyone</p>
+        <p class="login-subtitle">Messaging for everyone</p>
         <button id="googleLoginBtn" class="google-btn">
             <svg viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -627,7 +627,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
     <script>
-        // Firebase Configuration - REPLACE THIS WITH YOUR ACTUAL FIREBASE CONFIG
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBb0guuO6wS1O1-J-4c8rXpO2INfyG4IW4",
             authDomain: "langis-v1.firebaseapp.com",
@@ -757,14 +757,14 @@
         function loadContacts() {
             // Load contacts from Firebase or use demo data
             const demoContacts = [
-                { id: '1', name: 'AM BM', avatar: 'AB', lastMessage: 'Hey there!', lastTime: '10:30 AM' },
-                { id: '2', name: 'Tab Te Deum', avatar: 'TD', lastMessage: 'See you tomorrow', lastTime: '9:45 AM' },
-                { id: '3', name: 'AP BP', avatar: 'AP', lastMessage: 'Thanks for the help', lastTime: 'Yesterday' },
+                { id: '1', name: 'Contact A', avatar: 'A', lastMessage: 'Hey there!', lastTime: '10:30 AM' },
+                { id: '2', name: 'Tablet', avatar: 'T', lastMessage: 'See you tomorrow', lastTime: '9:45 AM' },
+                { id: '3', name: 'Someone', avatar: 'S', lastMessage: 'Thanks for the help', lastTime: 'Yesterday' },
                 { id: '4', name: 'Note to Self', avatar: 'NS', lastMessage: 'Buy groceries', lastTime: 'Yesterday' },
-                { id: '5', name: 'An Bn', avatar: 'An', lastMessage: 'Call me back', lastTime: 'Mon' },
-                { id: '6', name: 'Z', avatar: 'Z', lastMessage: 'Meeting at 3pm', lastTime: 'Mon' },
-                { id: '7', name: 'TeDeumP', avatar: 'TP', lastMessage: 'Great job!', lastTime: 'Sun' },
-                { id: '8', name: 'Adriana St. Edward', avatar: 'AE', lastMessage: 'Let\'s catch up soon', lastTime: 'Sun' }
+                { id: '5', name: 'Contact B', avatar: 'B', lastMessage: 'Call me back', lastTime: 'Mon' },
+                { id: '6', name: 'Contact C', avatar: 'C', lastMessage: 'Meeting at 3pm', lastTime: 'Mon' },
+                { id: '7', name: 'Contact D', avatar: 'D', lastMessage: 'Great job!', lastTime: 'Sun' },
+                { id: '8', name: 'Contact E', avatar: 'E', lastMessage: 'Let\'s catch up soon', lastTime: 'Sun' }
             ];
 
             contacts = demoContacts;
